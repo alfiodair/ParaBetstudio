@@ -17,7 +17,8 @@
         <img src="hero-logo.png" alt="Joker Fortuna" class="hero-logo"/>
         <h1>JOKER FORTUNA</h1>
         <p class="subtitle">Pagando premios las 24hs</p>
-        <a class="btn-primary" href="#">RECLAMAR BONO</a>
+        <!-- Enlace a WhatsApp: se abre en nueva pestaña en escritorio; en móvil intenta abrir la app y si falla abre WhatsApp Web -->
+        <a class="btn-primary" id="claim-btn" href="https://wa.me/595986411949?text=Hola%2C%20quiero%20reclamar%20el%20bono" target="_blank" rel="noopener">RECLAMAR BONO</a>
       </div>
     </section>
 
@@ -37,5 +38,43 @@
     </footer>
   </main>
 
+  <script>
+    // Configuración de WhatsApp
+    (function(){
+      const phone = '595986411949';
+      const text = encodeURIComponent('Hola, quiero reclamar el bono');
+      const waWeb = `https://wa.me/${phone}?text=${text}`;
+      const waApp = `whatsapp://send?phone=${phone}&text=${text}`;
+      const btn = document.getElementById('claim-btn');
+
+      function isMobile() {
+        return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+      }
+
+      if(!btn) return;
+
+      btn.addEventListener('click', function(e){
+        // Si es móvil intentamos abrir la app nativa; si no, abrimos WhatsApp Web en nueva pestaña
+        if(isMobile()){
+          try{
+            window.location = waApp;
+          }catch(err){
+            window.open(waWeb, '_blank');
+          }
+          setTimeout(function(){
+            window.open(waWeb, '_blank');
+          }, 900);
+          e.preventDefault();
+        } else {
+          window.open(waWeb, '_blank');
+          e.preventDefault();
+        }
+      });
+    })();
+  </script>
+
+  <noscript>
+    <!-- Si JavaScript está deshabilitado, el enlace apunta directamente a WhatsApp Web y se abre en nueva pestaña por el atributo target -->
+  </noscript>
 </body>
 </html>
